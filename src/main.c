@@ -1,6 +1,9 @@
 #include <stdint.h>
 #include <raylib.h>
 
+// If this flag is commented the the 2 player will be replaced with a bot
+#define TWO_PLAYERS 
+
 #define FlipFlag(x, y, z) (*(x) = (*(x) == (y)) ? (z) : (y))
 
 typedef enum {
@@ -148,33 +151,27 @@ void updateBallPos(Ball *ball, float speedMultiplier)
 
 void updatePlayersPos(void)
 {
-    //if (IsKeyDown(KEY_W)) {
-    //    player1.y = max(10, player1.y - PLAYER_SPEED);
-    //}
-    //if (IsKeyDown(KEY_S)) {
-    //    player1.y = min(SCREEN_HEIGHT - PLATFORM_HEIGHT - 10, player1.y + PLAYER_SPEED);
-    //}
-
-    //if (IsKeyDown(KEY_UP)) {
-    //    player2.y = max(10, player2.y - PLAYER_SPEED);
-    //}
-    //if (IsKeyDown(KEY_DOWN)) {
-    //    player2.y = min(SCREEN_HEIGHT - PLATFORM_HEIGHT - 10, player2.y + PLAYER_SPEED);
-    //}
-    
-    if (ball.y < player1.y + PLATFORM_HEIGHT / 2.0f) {
+    if (IsKeyDown(KEY_W)) {
         player1.y = max(10, player1.y - PLAYER_SPEED);
     }
-    if (ball.y > player1.y + PLATFORM_HEIGHT / 2.0f) {
+    if (IsKeyDown(KEY_S)) {
         player1.y = min(SCREEN_HEIGHT - PLATFORM_HEIGHT - 10, player1.y + PLAYER_SPEED);
     }
-
+#ifdef TWO_PLAYERS
+    if (IsKeyDown(KEY_UP)) {
+        player2.y = max(10, player2.y - PLAYER_SPEED);
+    }
+    if (IsKeyDown(KEY_DOWN)) {
+        player2.y = min(SCREEN_HEIGHT - PLATFORM_HEIGHT - 10, player2.y + PLAYER_SPEED);
+    }
+#else
     if (ball.y < player2.y + PLATFORM_HEIGHT / 2.0f) {
         player2.y = max(10, player2.y - PLAYER_SPEED);
     }
     if (ball.y > player2.y + PLATFORM_HEIGHT / 2.0f) {
         player2.y = min(SCREEN_HEIGHT - PLATFORM_HEIGHT - 10, player2.y + PLAYER_SPEED);
     }
+#endif
 }
 
 int main(void)
